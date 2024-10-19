@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 cmd="$1"
+ubctl="unbound-control -c /var/unbound/unbound.conf"
 
-display () {
-    unbound-control list_local_zones | egrep -v '^(OPNsense|localdomain)|(ip6|in-addr|home)\.arpa|(static|redirect)$'
+display() {
+    $ubctl list_local_zones | egrep -v '^(OPNsense|localdomain)|(ip6|in-addr|home)\.arpa|(static|redirect)$'
 }
 
-if [ -z $cmd ]
-then
+if [ -z $cmd ]; then
     display
     exit
 fi
-

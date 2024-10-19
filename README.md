@@ -1,8 +1,22 @@
 # unbound-onlywhite
+
 Make an Exam Environment with only allowed Domains
 
-## bootstrapping unbound
+## Preface
 
-- .cshrc: "bash" am Ende
-- /usr/local/etc/unbound.opnsense.d/
-- unbound-control-setup    
+Unbound lives in /var/unbound on OPNsense. Preferred way of changing stuff outside the GUI is to write `*.conf` files in `/usr/local/etc/unbound.opnsense.d/`.
+
+## enable unbound remote control
+
+- .cshrc: "exec bash" at the end (optional)
+- /usr/local/etc/unbound.opnsense.d/schurli.conf:
+
+```config
+remote-control:
+    control-enable: yes
+```
+
+- unbound-control-setup -c /var/unbound/unbound.conf
+- `alias ubctl='unbound-control -c /var/unbound/unbound.conf'`
+
+##
