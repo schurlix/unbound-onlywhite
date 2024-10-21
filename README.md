@@ -19,4 +19,8 @@ remote-control:
 - unbound-control-setup -c /var/unbound/unbound.conf
 - `alias ubctl='unbound-control -c /var/unbound/unbound.conf'`
 
-##
+## FAQ
+
+### what is static / redirect / transparent?
+
+see local-zone in man unbound.conf
