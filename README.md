@@ -21,6 +21,30 @@ remote-control:
 
 ## FAQ
 
-### what is static / redirect / transparent?
+### Interesting local-zone-types
 
-see local-zone in man unbound.conf
+#### Allow
+
+- transparent
+- inform (same as transparent but with log)
+
+### local-zone: what is static / redirect / transparent?
+
+DOC: local-zone in man [unbound.conf](https://unbound.docs.nlnetlabs.nl/en/latest/manpages/unbound.conf.html)
+
+`local-zone: <zone> <type>`
+
+The type determines the answer to give if there is no match from local-data.
+
+### caching of negative DNS responses
+
+not cached:
+
+- servfail
+- refused (type: refuse)
+
+possibly cached:
+
+- nxdomain (cachetime: negative ttl) (type: static and no local data)
+- nodata (cachetime negative ttl) (type: static and no local data)
+- notimp (!!) *could* be cached
