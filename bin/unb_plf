@@ -1,7 +1,0 @@
-unbound-control local_zones << EOF
-. refuse
-google.at transparent
-opnsense.org transparent
-cloudflare.net transparent
-EOF
-echo "done"
