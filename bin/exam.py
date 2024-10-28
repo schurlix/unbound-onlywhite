@@ -7,17 +7,24 @@ import sys
 
 
 ubctl = "unbound-control -c /var/unbound/unbound.conf"
+hints = ["# tail -1000f /var/log/resolver/latest.log | fgrep always_refuse"]
 etc_dir = os.path.join(os.path.dirname(sys.argv[0]), "..", "etc")
 allow_word = "always_transparent"
 deny_word = "always_refuse"
 re_builtin_zones = re.compile(
     "(onion|invalid|localhost|test|localdomain)|(([02f].ip6|in-addr|home)\.arpa)\.$"
 )
-colors = {"red": 31, "green": 32, "yellow": 33, "blue": 34, "magenta": 35}
 
 
 def colorize(text, color):
+    colors = {"red": 31, "green": 32, "yellow": 33, "blue": 34, "magenta": 35}
     return f"\033[{colors[color]}m{text}\033[0m"
+
+
+def do_hints():
+    print(colorize(f"Hints:", "green"))
+    for h in hints:
+        print(h)
 
 
 def show(verbose=False):
@@ -133,7 +140,9 @@ parser.add_argument(
     metavar="zone",
 )
 parser.add_argument("--test", "-t", help="run tests", action="store_true")
+parser.add_argument("--hints", "-H", help="show hints", action="store_true")
 parser.add_argument("--verbose", "-v", help="verbose output", action="store_true")
+
 args = parser.parse_args()  # throws if shit is supplied
 if args.show:
     show(args.verbose)
@@ -143,6 +152,7 @@ elif args.load:
     load(args.load)
 elif args.test:
     run_test()
+elif args.hints:
+    do_hints()
 else:
     parser.print_help()
-    print(colorize("landed in else", "red"))
