@@ -67,7 +67,7 @@ for line in open(args.file).read().splitlines():
             continue
         status = m.group(1)
         if actions[status] != action:
-            print(colorize(f"FAIL: {line} (status: {status})", "red"))
+            print(colorize(f"FAIL: {line} (status: {status})", "yellow"))
             break
         print(colorize(f"PASS: {line} (status: {status})", "green"))
         break

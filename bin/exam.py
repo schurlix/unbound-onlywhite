@@ -32,9 +32,9 @@ def show(verbose=False):
     rv_deny = []
     bundle = exec_ubctl("list_local_zones")
     if bundle["rc"] != 0 or bundle["err"]:
-        print(colorize(f"ERROR: (rc: {bundle['rc']}) {bundle['err']}", "red"))
+        print(colorize(f"ERROR: (rc: {bundle['rc']}) {bundle['err']}", "yellow"))
         return
-    print(colorize(f"active local_zones:", "green"))
+    print(f"Currently configured zones:")
     for line_raw in bundle["out"].split("\n"):
         line = line_raw.split(" ")[0].strip()
         if not line:
@@ -51,16 +51,18 @@ def show(verbose=False):
     rv_deny = "\n".join(rv_deny)
     rv_allow.sort()
     rv_allow = "\n".join(rv_allow)
-    print(colorize(f"DENIED:", "red"))
-    print(rv_deny)
+    print(colorize(f"DENIED:", "yellow"))
+    if rv_deny:
+        print(rv_deny)
     print(colorize(f"ALLOWED:", "green"))
-    print(rv_allow)
+    if rv_allow:
+        print(rv_allow)
 
 
 def reload():
     bundle = exec_ubctl("reload")
     if bundle["rc"] != 0 or bundle["err"]:
-        print(colorize(f"ERROR: (rc: {bundle['rc']}) {bundle['err']}", "red"))
+        print(colorize(f"ERROR: (rc: {bundle['rc']}) {bundle['err']}", "yellow"))
         return
     print(colorize(bundle["out"].rstrip(), "green"))
 
@@ -78,7 +80,7 @@ def load(config):  # eg. "ahwii"
             zone = line.split("#")[0].strip()
             local_zones_input.append(f"{zone} {deny_word}")
     else:
-        print(colorize(f"ERROR: no {deny_name} found", "red"))
+        print(colorize(f"ERROR: no {deny_name} found", "yellow"))
         return
 
     allow_name = os.path.join(etc_dir, f"{config}.allow.zone")
@@ -91,14 +93,14 @@ def load(config):  # eg. "ahwii"
             zone = line.split("#")[0].strip()
             local_zones_input.append(f"{zone} {allow_word}")
     else:
-        print(colorize(f"ERROR: no {allow_name} found", "red"))
+        print(colorize(f"ERROR: no {allow_name} found", "yellow"))
         return
 
     local_zones_input = "\n".join(local_zones_input) + "\n"
     print(colorize(f"local_zones_input:\n{local_zones_input}", "blue"))
     bundle = exec_ubctl("local_zones", input=local_zones_input)
     if bundle["rc"] != 0 or bundle["err"]:
-        print(colorize(f"ERROR: (rc: {bundle['rc']}) {bundle['err']}", "red"))
+        print(colorize(f"ERROR: (rc: {bundle['rc']}) {bundle['err']}", "yellowlow"))
         return
     print(colorize(bundle["out"].rstrip(), "green"))
 
