@@ -1,0 +1,10 @@
+- copilot-proxy.githubusercontent.com
+- orf.at
+- google.com
+- google.at
++ www.google.at
++ prisma.io
++ www.prisma.io
+- githubcopilot.com
++ developer.mozilla.org
++ mdn.mozilla.net

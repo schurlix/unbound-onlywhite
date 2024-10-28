@@ -21,6 +21,8 @@ def colorize(text, color):
 
 
 def show(verbose=False):
+    rv_allow = []
+    rv_deny = []
     bundle = exec_ubctl("list_local_zones")
     if bundle["rc"] != 0 or bundle["err"]:
         print(colorize(f"ERROR: (rc: {bundle['rc']}) {bundle['err']}", "red"))
@@ -34,7 +36,18 @@ def show(verbose=False):
             if verbose:
                 print(colorize(line_raw, "yellow"))
             continue
-        print(line_raw)
+        if line_raw.endswith(allow_word):
+            rv_allow.append(line)
+        else:  # if line_raw.endswith(deny_word):
+            rv_deny.append(line)
+    rv_deny.sort()
+    rv_deny = "\n".join(rv_deny)
+    rv_allow.sort()
+    rv_allow = "\n".join(rv_allow)
+    print(colorize(f"DENIED:", "red"))
+    print(rv_deny)
+    print(colorize(f"ALLOWED:", "green"))
+    print(rv_allow)
 
 
 def reload():
@@ -49,7 +62,6 @@ def load(config):  # eg. "ahwii"
     local_zones_input = []
 
     deny_name = os.path.join(etc_dir, f"{config}.deny.zone")
-    print(colorize(f"INFO: etc_dir: {etc_dir}", "red"))
     if os.path.isfile(deny_name):
         deny_file = open(deny_name).read().splitlines()
         for line in deny_file:
@@ -60,6 +72,7 @@ def load(config):  # eg. "ahwii"
             local_zones_input.append(f"{zone} {deny_word}")
     else:
         print(colorize(f"ERROR: no {deny_name} found", "red"))
+        return
 
     allow_name = os.path.join(etc_dir, f"{config}.allow.zone")
     if os.path.isfile(allow_name):
@@ -72,8 +85,9 @@ def load(config):  # eg. "ahwii"
             local_zones_input.append(f"{zone} {allow_word}")
     else:
         print(colorize(f"ERROR: no {allow_name} found", "red"))
+        return
 
-    local_zones_input = "\n".join(local_zones_input)
+    local_zones_input = "\n".join(local_zones_input) + "\n"
     print(colorize(f"local_zones_input:\n{local_zones_input}", "blue"))
     bundle = exec_ubctl("local_zones", input=local_zones_input)
     if bundle["rc"] != 0 or bundle["err"]:
@@ -82,63 +96,53 @@ def load(config):  # eg. "ahwii"
     print(colorize(bundle["out"].rstrip(), "green"))
 
 
-def allow(zone):
-    print(
-        f"\033[31mTODO allow ({zone})\033[0m"
-    )  # 31-35 red, green, yellow, blue, magenta
-
-
-def deny(zone):
-    print(
-        f"\033[31mTODO deny ({zone})\033[0m"
-    )  # 31-35 red, green, yellow, blue, magenta
-
-
 def exec_ubctl(args, input=None):
     command = f"{ubctl} {args}"
+    if input and not input.endswith("\n"):
+        input += "\n"
     result = subprocess.run(
         command,
         shell=True,
         check=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-        input=input + "\n",
+        input=input,
         text=True,
     )
     return {"rc": result.returncode, "out": result.stdout, "err": result.stderr}
 
 
-def main():
-    parser = argparse.ArgumentParser(description="exam.py: control unbound-onlywhite")
-    parser.add_argument(
-        "--show", "-s", help="show active local zones", action="store_true"
-    )
-    parser.add_argument(
-        "--reload",
-        "-r",
-        help="reload unbound. Resets local zones to unbound defaults",
-        action="store_true",
-    )
-    parser.add_argument(
-        "--load", "-l", help="load a preconfigured setup", choices=["ahwii"]
-    )
-    parser.add_argument("--allow", "-a", help="allow a domain")
-    parser.add_argument("--deny", "-d", help="deny a domain")
-    parser.add_argument("--verbose", "-v", help="verbose output", action="store_true")
-    args = parser.parse_args()  # throws if shit is supplied
-    if args.show:
-        show(args.verbose)
-    elif args.reload:
-        reload()
-    elif args.allow:
-        allow(args.allow)
-    elif args.deny:
-        deny(args.deny)
-    elif args.load:
-        load(args.load)
-    else:
-        parser.print_help()
+def run_test():
+    subprocess.Popen(["exam-test.py"], shell=True).wait()
 
 
-if __name__ == "__main__":
-    main()
+parser = argparse.ArgumentParser(description="exam.py: control unbound-onlywhite")
+parser.add_argument("--show", "-s", help="show active local zones", action="store_true")
+parser.add_argument(
+    "--reload",
+    "-r",
+    help="reload unbound. Resets local zones to unbound defaults",
+    action="store_true",
+)
+parser.add_argument(
+    "--load",
+    "-l",
+    help="load a preconfigured setup (default: ahwii)",
+    const="ahwii",
+    nargs="?",
+    metavar="zone",
+)
+parser.add_argument("--test", "-t", help="run tests", action="store_true")
+parser.add_argument("--verbose", "-v", help="verbose output", action="store_true")
+args = parser.parse_args()  # throws if shit is supplied
+if args.show:
+    show(args.verbose)
+elif args.reload:
+    reload()
+elif args.load:
+    load(args.load)
+elif args.test:
+    run_test()
+else:
+    parser.print_help()
+    print(colorize("landed in else", "red"))
