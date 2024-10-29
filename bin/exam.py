@@ -39,13 +39,15 @@ def show(verbose=False):
         print(colorize(f"ERROR: (rc: {bundle['rc']}) {bundle['err']}", "yellow"))
         return
     print(f"Currently configured zones:")
+    if verbose:
+        print(colorize("Builtin:", "blue"))
     for line_raw in bundle["out"].split("\n"):
         line = line_raw.split(" ")[0].strip()
         if not line:
             continue
         if re_builtin_zones.search(line):
             if verbose:
-                print(colorize(line_raw, "yellow"))
+                print(line_raw)
             continue
         if line_raw.endswith(allow_word):
             rv_allow.append(line)
@@ -55,10 +57,10 @@ def show(verbose=False):
     rv_deny = "\n".join(rv_deny)
     rv_allow.sort()
     rv_allow = "\n".join(rv_allow)
-    print(colorize(f"DENIED:", "yellow"))
+    print(colorize(f"DENIED for exam:", "yellow"))
     if rv_deny:
         print(rv_deny)
-    print(colorize(f"ALLOWED:", "green"))
+    print(colorize(f"ALLOWED for exam:", "green"))
     if rv_allow:
         print(rv_allow)
 
@@ -130,24 +132,24 @@ def run_test():
 
 
 parser = argparse.ArgumentParser(description="exam.py: control unbound-onlywhite")
-parser.add_argument("--show", "-s", help="show active local zones", action="store_true")
+parser.add_argument("-s", "--show", help="show active local zones", action="store_true")
 parser.add_argument(
-    "--reload",
     "-r",
+    "--reload",
     help="reload unbound. Resets local zones to unbound defaults",
     action="store_true",
 )
 parser.add_argument(
-    "--load",
     "-l",
+    "--load",
     help="load a preconfigured setup (default: ahwii)",
     const="ahwii",
     nargs="?",
     metavar="zone",
 )
-parser.add_argument("--test", "-t", help="run tests", action="store_true")
-parser.add_argument("--hints", "-H", help="show hints", action="store_true")
-parser.add_argument("--verbose", "-v", help="verbose output", action="store_true")
+parser.add_argument("-t", "--test", help="run tests", action="store_true")
+parser.add_argument("-H", "--hints", help="show hints", action="store_true")
+parser.add_argument("-v", "--verbose", help="verbose output", action="store_true")
 
 args = parser.parse_args()  # throws if shit is supplied
 if args.show:
