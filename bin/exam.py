@@ -32,7 +32,7 @@ def do_hints():
 
 
 def show(verbose=False):
-    rv_allow = []
+    rv_allow = [] # keep return values
     rv_deny = []
     bundle = exec_ubctl("list_local_zones")
     if bundle["rc"] != 0 or bundle["err"]:
@@ -51,8 +51,11 @@ def show(verbose=False):
             continue
         if line_raw.endswith(allow_word):
             rv_allow.append(line)
-        else:  # if line_raw.endswith(deny_word):
+            continue
+        if line_raw.endswith(deny_word):
             rv_deny.append(line)
+            continue
+        print(colorize(f"NO MATCH for {line_raw}", "red"))
     rv_deny.sort()
     rv_deny = "\n".join(rv_deny)
     rv_allow.sort()
