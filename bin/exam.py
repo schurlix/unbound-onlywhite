@@ -7,7 +7,11 @@ import sys
 
 
 ubctl = "unbound-control -c /var/unbound/unbound.conf"
-hints = ["# tail -1000f /var/log/resolver/latest.log | fgrep always_refuse"]
+hints = [
+    "tail -1000f /var/log/resolver/latest.log | fgrep always_refuse",
+    """tail -10000f /var/log/resolver/latest.log | awk -v FS='always_refuse ' 'NF==2 {print $2}' | awk '{print $2, $3, $4}'""",
+    "nmap -sn -n 192.168.0.0/24",
+]
 etc_dir = os.path.join(os.path.dirname(sys.argv[0]), "..", "etc")
 allow_word = "always_transparent"
 deny_word = "always_refuse"
