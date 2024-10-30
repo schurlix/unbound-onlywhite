@@ -7,13 +7,14 @@ of the internet (where the docs live), but no ChatGPT and friends, webmail sites
 
 ## Getting started
 
-### Important OPNSense fiddlery
+### Important OPNSense config
 
 - git clone this repository as `root` into `/root` (or just extract the zipfile/tarball)
-- prohibit port 53 destinations coming from the WIFI
+- prohibit port 53 destinations coming from the wifi
+- block 1.1.1.1, 1.0.0.1, 8.8.8.8 and 8.8.4.4 proto https, coming from wifi
 - prohibit other cheating opportunities like port 22
-- unbound should only listen on the WIFI routing interface
-- unbound should use some other "on premise" DNS Server as forwarder. Not using a forwarder, I ran into strange timeouts when unbound does the recursion on its own. I find this behaviour plausible, as I am doing weird things.
+- make unbound only listen on the wifi routing interface
+- unbound should use some other "on premise" DNS Server as forwarder. Not using a forwarder, I ran into strange timeouts when unbound does the recursion on its own. I find this behaviour plausible, as weird things are going on.
 - raise unbounds log level for querylogs in order to track denied queries
 - OPNSense should not use this kinda misconfigured unbound as a system resolver itself.
 
