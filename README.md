@@ -56,7 +56,16 @@ A: This is a first shot, now version numbers. I'm still not sure whether this ma
 
 Q: Which nmap command to use to see who responds to arp on my net?
 
-A: nmap -sn -n 192.168.0.0/24
+A: /usr/local/bin/nmap -sn -n 192.168.0.0/24
+
+Q: add a custom cronjob on opnsense
+
+A: /usr/local/opnsense/service/conf/actions.d/actions_exampy.conf
+
+```ini
+[my_cronjob]
+action=run_script
+script=/usr/local/bin/my_script.sh```
 
 Q: I want as little caching of negative DNS responses as possible.
 
