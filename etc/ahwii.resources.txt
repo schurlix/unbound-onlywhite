@@ -1,10 +1,8 @@
 getbootstrap.com
-www.google.at
-www.google.com
+www.google.(at|com)
 www.ecosia.org
 prisma.io
 github.com
 developer.mozilla.org
-mdn.mozilla.net
 www.w3.org
 www.w3schools.com
