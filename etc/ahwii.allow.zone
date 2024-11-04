@@ -10,5 +10,6 @@ developer.mozilla.org
 mdn.mozilla.net
 www.w3.org
 www.w3schools.com
-getboostrap.com
+getbootstrap.com
+cdn.jsdelivr.net # needed by bootstrap
 connectivity-check.ubuntu.com

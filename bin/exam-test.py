@@ -35,15 +35,15 @@ def exec_dig(args):
 
 parser = argparse.ArgumentParser(description="exam.py: control unbound-onlywhite")
 parser.add_argument(
-    "--file",
     "-f",
+    "--file",
     help=f"use file as input (default: {tests_default})",
     type=str,
     default=tests_default,
 )
 parser.add_argument(
-    "--nameserver",
     "-n",
+    "--nameserver",
     help=f"nameserver to query (default: {ns_default})",
     type=str,
     default=ns_default,
