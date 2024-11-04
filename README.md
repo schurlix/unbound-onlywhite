@@ -63,9 +63,12 @@ Q: add a custom cronjob on opnsense
 A: /usr/local/opnsense/service/conf/actions.d/actions_exampy.conf
 
 ```ini
-[my_cronjob]
-action=run_script
-script=/usr/local/bin/my_script.sh```
+[nmap]
+type:script
+command:/root/unbound-onlywhite/bin/exampy_cron.sh
+message:Executing Nmap in local LAN
+description:Use nmap to query online hosts
+```
 
 Q: I want as little caching of negative DNS responses as possible.
 
