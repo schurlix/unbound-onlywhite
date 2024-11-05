@@ -1,4 +1,5 @@
 getbootstrap.com
+validator.w3.org
 www.google.(at|com)
 www.ecosia.org
 prisma.io

@@ -13,5 +13,6 @@ www.w3schools.com
 getbootstrap.com
 cdn.jsdelivr.net # needed by bootstrap
 connectivity-check.ubuntu.com
-vscode-sync.trafficmanager.net # vscode extensions
-mobile.events.data.microsoft.com # vscode extensions
+marketplace.visualstudio.com # vscode extensions search
+vsassets.io # vscode extension install
+validator.w3.org
