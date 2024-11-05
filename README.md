@@ -74,7 +74,7 @@ A: /usr/local/opnsense/service/conf/actions.d/actions_exampy.conf
 type:script
 command:/root/unbound-onlywhite/bin/exampy_cron.sh
 message:Executing Nmap in local LAN
-description:Use nmap to query online hosts
+description:exampy nmap
 ```
 
 Q: I want as little caching of negative DNS responses as possible.
